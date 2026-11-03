@@ -5,6 +5,7 @@ __pycache__/
 .runtime-test/
 .runtime-cache/
 .validation-tmp/
+.workflow/
 *.log
 .env
 .env.*

@@ -1,22 +1,197 @@
 {
   "kind": "software-development-role-catalog",
-  "framework": "Role-Action-Context-Expectation + one-shot",
+  "framework": "专业岗位、按需技术能力与模块任务合同",
   "native_agent_registration": false,
   "policy_file": "shared-rules.md",
   "stack_file": "stacks.md",
   "task_schema_file": "task-card.schema.json",
   "roles": [
-    {"id": "planner", "name": "协调者／项目负责人", "prompt_file": "roles/planner.md", "capability_profile": "planning", "default_mode": "read-only"},
-    {"id": "product", "name": "产品与体验负责人", "prompt_file": "roles/product.md", "capability_profile": "product", "default_mode": "read-only"},
-    {"id": "architect", "name": "架构与接口负责人", "prompt_file": "roles/architect.md", "capability_profile": "architecture", "default_mode": "read-only"},
-    {"id": "frontend", "name": "前端工程师", "prompt_file": "roles/frontend.md", "capability_profile": "implementation", "default_mode": "read-only"},
-    {"id": "backend", "name": "后端工程师", "prompt_file": "roles/backend.md", "capability_profile": "implementation", "default_mode": "read-only"},
-    {"id": "desktop", "name": "桌面应用工程师", "prompt_file": "roles/desktop.md", "capability_profile": "implementation", "default_mode": "read-only"},
-    {"id": "data", "name": "数据工程师", "prompt_file": "roles/data.md", "capability_profile": "implementation", "default_mode": "read-only"},
-    {"id": "automation", "name": "自动化与脚本工程师", "prompt_file": "roles/automation.md", "capability_profile": "implementation", "default_mode": "read-only"},
-    {"id": "devops", "name": "部署与交付工程师", "prompt_file": "roles/devops.md", "capability_profile": "operations", "default_mode": "read-only"},
-    {"id": "qa", "name": "独立测试与验收工程师", "prompt_file": "roles/qa.md", "capability_profile": "independent-verification", "default_mode": "read-only"},
-    {"id": "security", "name": "安全评审工程师", "prompt_file": "roles/security.md", "capability_profile": "independent-verification", "default_mode": "read-only"},
-    {"id": "worker", "name": "基础执行成员", "prompt_file": "roles/worker.md", "capability_profile": "bounded-execution", "default_mode": "read-only"}
-  ]
+    {
+      "id": "planner",
+      "name": "协调者／项目负责人",
+      "prompt_file": "roles/planner.md",
+      "capability_profile": "planning",
+      "default_mode": "read-only",
+      "work_types": [
+        "planning",
+        "research"
+      ],
+      "technical_references": [
+        "technology/selection.md",
+        "technology/research.md",
+        "technology/architecture.md"
+      ]
+    },
+    {
+      "id": "product",
+      "name": "产品与体验负责人",
+      "prompt_file": "roles/product.md",
+      "capability_profile": "product",
+      "default_mode": "read-only",
+      "work_types": [
+        "product",
+        "ux"
+      ],
+      "technical_references": [
+        "technology/product-testing.md"
+      ]
+    },
+    {
+      "id": "architect",
+      "name": "架构与接口负责人",
+      "prompt_file": "roles/architect.md",
+      "capability_profile": "architecture",
+      "default_mode": "read-only",
+      "work_types": [
+        "architecture",
+        "research"
+      ],
+      "technical_references": [
+        "technology/architecture.md",
+        "technology/research.md"
+      ]
+    },
+    {
+      "id": "frontend",
+      "name": "前端与移动应用工程师",
+      "prompt_file": "roles/frontend.md",
+      "capability_profile": "implementation",
+      "default_mode": "read-only",
+      "work_types": [
+        "web-ui",
+        "mobile",
+        "desktop-ui"
+      ],
+      "technical_references": [
+        "technology/web.md",
+        "technology/mobile.md"
+      ]
+    },
+    {
+      "id": "backend",
+      "name": "后端工程师",
+      "prompt_file": "roles/backend.md",
+      "capability_profile": "implementation",
+      "default_mode": "read-only",
+      "work_types": [
+        "service",
+        "java",
+        "rust"
+      ],
+      "technical_references": [
+        "technology/web.md",
+        "specialties/java.md",
+        "specialties/rust.md"
+      ]
+    },
+    {
+      "id": "desktop",
+      "name": "桌面应用工程师",
+      "prompt_file": "roles/desktop.md",
+      "capability_profile": "implementation",
+      "default_mode": "read-only",
+      "work_types": [
+        "desktop",
+        "native-core"
+      ],
+      "technical_references": [
+        "technology/desktop.md",
+        "specialties/rust.md"
+      ]
+    },
+    {
+      "id": "data",
+      "name": "数据工程师",
+      "prompt_file": "roles/data.md",
+      "capability_profile": "implementation",
+      "default_mode": "read-only",
+      "work_types": [
+        "data",
+        "batch",
+        "sql"
+      ],
+      "technical_references": [
+        "technology/data-performance.md"
+      ]
+    },
+    {
+      "id": "automation",
+      "name": "自动化与脚本工程师",
+      "prompt_file": "roles/automation.md",
+      "capability_profile": "implementation",
+      "default_mode": "read-only",
+      "work_types": [
+        "script",
+        "cli",
+        "windows",
+        "linux"
+      ],
+      "technical_references": [
+        "technology/scripting.md",
+        "technology/windows-shell.md"
+      ]
+    },
+    {
+      "id": "devops",
+      "name": "部署与交付工程师",
+      "prompt_file": "roles/devops.md",
+      "capability_profile": "operations",
+      "default_mode": "read-only",
+      "work_types": [
+        "operations",
+        "delivery",
+        "recovery"
+      ],
+      "technical_references": [
+        "technology/operations.md"
+      ]
+    },
+    {
+      "id": "qa",
+      "name": "独立测试与验收工程师",
+      "prompt_file": "roles/qa.md",
+      "capability_profile": "independent-verification",
+      "default_mode": "read-only",
+      "work_types": [
+        "testing",
+        "acceptance"
+      ],
+      "technical_references": [
+        "technology/product-testing.md"
+      ]
+    },
+    {
+      "id": "security",
+      "name": "安全评审工程师",
+      "prompt_file": "roles/security.md",
+      "capability_profile": "independent-verification",
+      "default_mode": "read-only",
+      "work_types": [
+        "security",
+        "review"
+      ],
+      "technical_references": [
+        "technology/operations.md"
+      ]
+    },
+    {
+      "id": "worker",
+      "name": "基础执行成员",
+      "prompt_file": "roles/worker.md",
+      "capability_profile": "bounded-execution",
+      "default_mode": "read-only",
+      "work_types": [
+        "bounded-implementation",
+        "search",
+        "execution"
+      ],
+      "technical_references": [
+        "stacks.md"
+      ]
+    }
+  ],
+  "specialty_files": {
+    "java": "specialties/java.md",
+    "rust": "specialties/rust.md"
+  }
 }

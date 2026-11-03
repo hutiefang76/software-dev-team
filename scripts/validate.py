@@ -60,6 +60,8 @@ def validate_package(skill: Path = SKILL) -> list[str]:
     ids = [role["id"] for role in catalog["roles"]]
     if len(ids) != len(set(ids)):
         errors.append("Role IDs must be unique")
+    for relative in catalog.get("specialty_files", {}).values():
+        resolve_inside(references, relative, skill)
     for key in ("policy_file", "stack_file", "task_schema_file"):
         resolve_inside(references, catalog[key], skill)
     for role in catalog["roles"]:
@@ -68,6 +70,10 @@ def validate_package(skill: Path = SKILL) -> list[str]:
             errors.append(f"Role ID and filename disagree: {role['id']}")
         if role.get("default_mode") != "read-only":
             errors.append(f"A role must not grant write permissions: {role['id']}")
+        if not role.get("work_types") or not role.get("technical_references"):
+            errors.append(f"Role needs work types and technical references: {role['id']}")
+        for relative in role.get("technical_references", []):
+            resolve_inside(references, relative, skill)
 
     schema = load_json(references / "task-card.schema.json")
     Draft202012Validator.check_schema(schema)
@@ -79,6 +85,8 @@ def validate_package(skill: Path = SKILL) -> list[str]:
     for file in skill.rglob("*"):
         if not file.is_file():
             continue
+        if file.suffix.lower() in {".js", ".mjs", ".py", ".ps1", ".sh", ".exe", ".dll", ".zip"}:
+            errors.append(f"Executable or runtime artifact in instruction-only skill: {file.relative_to(skill)}")
         if file.suffix in {".json", ".yaml", ".md", ".mjs"}:
             contents = file.read_text(encoding="utf-8")
             if re.search(r"\b[A-Za-z]:[\\/]", contents):
