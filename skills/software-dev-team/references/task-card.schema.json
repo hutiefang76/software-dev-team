@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "软件开发团队任务卡",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "goal", "role_id", "repo", "inputs", "authority", "scope", "owners", "binding", "dependencies", "acceptance", "stop_conditions"],
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "text_list": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true}
+  },
+  "properties": {
+    "task_id": {"$ref": "#/$defs/text"},
+    "goal": {"$ref": "#/$defs/text"},
+    "role_id": {"enum": ["planner", "product", "architect", "frontend", "backend", "desktop", "data", "automation", "devops", "qa", "security", "worker"]},
+    "repo": {"$ref": "#/$defs/text"},
+    "inputs": {"$ref": "#/$defs/text_list"},
+    "authority": {"allOf": [{"$ref": "#/$defs/text_list"}], "minItems": 1},
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "read_files", "write_files", "allowed_commands", "runtime_resources", "non_goals"],
+      "properties": {
+        "mode": {"enum": ["read-only", "write", "execute"]},
+        "read_files": {"$ref": "#/$defs/text_list"},
+        "write_files": {"$ref": "#/$defs/text_list"},
+        "allowed_commands": {"$ref": "#/$defs/text_list"},
+        "runtime_resources": {"$ref": "#/$defs/text_list"},
+        "non_goals": {"$ref": "#/$defs/text_list"}
+      },
+      "allOf": [
+        {"if": {"properties": {"mode": {"const": "read-only"}}}, "then": {"properties": {"write_files": {"maxItems": 0}, "runtime_resources": {"maxItems": 0}}}},
+        {"if": {"properties": {"mode": {"const": "execute"}}}, "then": {"properties": {"allowed_commands": {"minItems": 1}}}}
+      ]
+    },
+    "owners": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coordinator", "writer", "resource_owner"],
+      "properties": {
+        "coordinator": {"$ref": "#/$defs/text"},
+        "writer": {"$ref": "#/$defs/text"},
+        "resource_owner": {"$ref": "#/$defs/text"}
+      }
+    },
+    "binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tool", "model", "effort", "disclosure"],
+      "properties": {
+        "tool": {"$ref": "#/$defs/text"},
+        "model": {"$ref": "#/$defs/text"},
+        "effort": {"$ref": "#/$defs/text"},
+        "disclosure": {
+          "type": "object", "additionalProperties": false,
+          "required": ["destination", "allowed_content"],
+          "properties": {"destination": {"$ref": "#/$defs/text"}, "allowed_content": {"$ref": "#/$defs/text_list"}},
+          "allOf": [
+            {"if": {"properties": {"destination": {"const": "none"}}}, "then": {"properties": {"allowed_content": {"maxItems": 0}}}, "else": {"properties": {"allowed_content": {"minItems": 1}}}}
+          ]
+        }
+      }
+    },
+    "dependencies": {"$ref": "#/$defs/text_list"},
+    "acceptance": {"allOf": [{"$ref": "#/$defs/text_list"}], "minItems": 1},
+    "stop_conditions": {"allOf": [{"$ref": "#/$defs/text_list"}], "minItems": 1},
+    "output_contract": {"$ref": "#/$defs/text"}
+  },
+  "allOf": [
+    {"if": {"properties": {"scope": {"properties": {"write_files": {"minItems": 1}}}}}, "then": {"properties": {"owners": {"properties": {"writer": {"not": {"const": "none"}}}}}}},
+    {"if": {"properties": {"scope": {"properties": {"runtime_resources": {"minItems": 1}}}}}, "then": {"properties": {"owners": {"properties": {"resource_owner": {"not": {"const": "none"}}}}}}}
+  ]
+}

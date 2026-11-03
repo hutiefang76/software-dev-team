@@ -1,0 +1,22 @@
+{
+  "task_id": "example-profile-review",
+  "goal": "仅静态核对资料保存失败时，现有页面是否保留草稿并展示既有错误合同",
+  "role_id": "frontend",
+  "repo": "example-app",
+  "inputs": ["调用者提供的 ProfileForm 片段与 DTO 合同；均为演示材料"],
+  "authority": ["示例仅允许审查提供材料，不提供实际产品执行或外发授权"],
+  "scope": {
+    "mode": "read-only",
+    "read_files": ["example-app/src/ProfileForm.tsx", "example-app/src/profile-api.ts"],
+    "write_files": [],
+    "allowed_commands": [],
+    "runtime_resources": [],
+    "non_goals": ["不修改产品", "不请求真实 API", "不向外部模型发送源码"]
+  },
+  "owners": {"coordinator": "example-coordinator；演示身份，非实际会话", "writer": "none", "resource_owner": "none"},
+  "binding": {"tool": "当前会话；演示拟派发，尚未调用", "model": "待实际回执核实", "effort": "沿用当前配置", "disclosure": {"destination": "none", "allowed_content": []}},
+  "dependencies": [],
+  "acceptance": ["给出材料位置和错误字段映射", "分开说明已证实事实、假设和未执行的验证"],
+  "stop_conditions": ["需要真实 API、产品写入或外部模型时返回范围缺项"],
+  "output_contract": "角色、范围、材料依据、实际验证、未完成；示例不是运行收据"
+}

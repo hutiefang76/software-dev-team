@@ -1,0 +1,13 @@
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+.runtime-test/
+.runtime-cache/
+.validation-tmp/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
