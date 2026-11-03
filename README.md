@@ -3,7 +3,7 @@
 [![Validate](https://github.com/hutiefang76/software-dev-team/actions/workflows/validate.yml/badge.svg)](https://github.com/hutiefang76/software-dev-team/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-一个可安装的 AI 软件开发团队 Skill：按任务选择专业岗位，用清楚的任务边界协作，以实际产物和验证结果交付。
+一个可安装的 AI 软件开发团队 Skill：先按模块/功能拆分工作，再分配产品、前端、后端、测试、运维职责，用清楚的任务边界协作，以实际产物和验证结果交付。
 
 推荐只安装 **`software-dev-team`** 这一个入口。12 个专业岗位按需加载，避免把整套团队塞进每次对话。适用于 Web、后端、桌面、数据处理、脚本和交付工作，不依赖特定业务项目或模型厂商。
 
@@ -14,6 +14,8 @@
 ```text
 npx skills add hutiefang76/software-dev-team --skill software-dev-team
 ```
+
+该安装工具需要 Node.js 22.20 或更高版本；也可使用下方的 Codex 安装入口。
 
 也可以在支持 GitHub Skill 安装的 Codex 中发送：
 
@@ -47,6 +49,15 @@ $software-dev-team 只读评审当前登录流程，交付带文件依据的问�
 
 ## 推荐分工
 
+采用“模块 × 职责”两个维度，而不是只列岗位名单：
+
+1. 按用户功能和现有架构确定模块、边界、共享接口与依赖。
+2. 为每个模块指定负责人，分配产品、前端、后端、测试、运维职责；不适用的职责说明原因。
+3. 任务同时标明模块与岗位，落实文件单写者；共享接口明确后才并行。
+4. 先验收各模块，再验证跨模块用户流程。同一成员可以承担多个明确职责，不按矩阵格子凑人数。
+
+[模块与职责矩阵及完整示例](skills/software-dev-team/references/team-design.md)
+
 | 场景 | 建议岗位 |
 |---|---|
 | 清楚的小改或一次检查 | 当前成员直接完成 |
@@ -72,6 +83,7 @@ skills/software-dev-team/
     roles/                     12 个 RACE 岗位与示例
     shared-rules.md            公共工程规范
     collaboration.md           分工、资源归属与回传
+    team-design.md              模块边界与职责矩阵
     task-card.schema.json      可选的机器可检查任务卡
     stacks.md                  按需技术能力
     hosts.md                   客户端与模型适配
@@ -92,11 +104,11 @@ node --test tests/runtime.test.mjs
 
 验证修改后的指令是否在真实场景中保持范围。结构检查和自动测试不能替代跨客户端使用验证，行为评测场景见 [evals/scenarios.json](evals/scenarios.json)。
 
-本项目维护团队岗位和 Maestro 自动接入层，上游 Maestro 使用官方 npm 发布包，不维护其源码分叉。当前测试过的上游版本及检查范围见 [运行时策略](skills/software-dev-team/references/runtime-policy.json)。
+本项目维护团队岗位和 Maestro 自动接入层，上游 Maestro 使用官方 npm 发布包，不维护其源码分叉。当前测试过的上游版本及检查范围见 [运行时策略](skills/software-dev-team/references/runtime-policy.json)。当前定位是经过验证的推荐实践，仍需真实项目持续检验，不宣称普遍适用的最佳实践。
 
 ## 来源与许可
 
-从作者原有的专用开发岗位库整理而来，保留按需加载、文件单写者和真实验收证据，移除业务专属规则、服务器信息、个人绝对路径和固定模型路线。
+只提供通用工程岗位、协作规则与虚构示例。技能资源使用包内相对引用，运行环境从实际客户端获取；不包含私人项目、环境地址、个人绝对路径或真实运行回执。
 
 按照 [OpenAI 的 Skill 文档](https://learn.chatgpt.com/docs/build-skills)组织入口与渐进加载；本项目是社区项目。“推荐入口”指本项目推荐的安装方式，不代表官方收录或认证。
 

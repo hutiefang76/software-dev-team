@@ -16,8 +16,11 @@ metadata:
 
 - 清楚的小任务直接完成，简单问答无需安装运行时或启动团队。
 - 需要专业能力时，从 [岗位索引](references/roles.json) 选择一个必要岗位，读取对应正文。
-- 需要分工时才读 [协调者](references/roles/planner.md) 与 [协作合同](references/collaboration.md)，按独立工作量选择成员数量。
+- 需要分工时，先读 [模块与职责划分](references/team-design.md)，按用户功能与现有模块确定工作边界、接口和依赖，再将产品、前端、后端、测试、运维职责映射到每个模块。
+- 再读 [协调者](references/roles/planner.md) 与 [协作合同](references/collaboration.md)，指定模块负责人和各项职责负责人。按独立工作量选择成员数量，同一成员可承担多个明确职责。
 - 只加载 [技术能力](references/stacks.md) 中相关章节。角色、客户端、模型分别选择。
+
+跨模块的共享接口与公共文件先确定唯一负责人，冻结必要合同后再并行。交付模块 × 职责矩阵；不适用的职责写原因。每张任务卡同时标明 `module_id` 和 `role_id`，避免只按“前端组／后端组”各扫全项目。已有模块划分与合同直接沿用，不另建计划。
 
 ## 自动准备 Maestro
 

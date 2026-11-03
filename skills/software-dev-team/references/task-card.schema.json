@@ -3,7 +3,7 @@
   "title": "软件开发团队任务卡",
   "type": "object",
   "additionalProperties": false,
-  "required": ["task_id", "goal", "role_id", "repo", "inputs", "authority", "scope", "owners", "binding", "dependencies", "acceptance", "stop_conditions"],
+  "required": ["task_id", "goal", "module_id", "role_id", "repo", "inputs", "authority", "scope", "owners", "binding", "dependencies", "acceptance", "stop_conditions"],
   "$defs": {
     "text": {"type": "string", "minLength": 1, "pattern": "\\S"},
     "text_list": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true}
@@ -11,6 +11,7 @@
   "properties": {
     "task_id": {"$ref": "#/$defs/text"},
     "goal": {"$ref": "#/$defs/text"},
+    "module_id": {"$ref": "#/$defs/text", "description": "所属功能模块，引用当前唯一计划或 Run 合同的模块划分"},
     "role_id": {"enum": ["planner", "product", "architect", "frontend", "backend", "desktop", "data", "automation", "devops", "qa", "security", "worker"]},
     "repo": {"$ref": "#/$defs/text"},
     "inputs": {"$ref": "#/$defs/text_list"},
@@ -33,9 +34,10 @@
     },
     "owners": {
       "type": "object", "additionalProperties": false,
-      "required": ["coordinator", "writer", "resource_owner"],
+      "required": ["coordinator", "module_owner", "writer", "resource_owner"],
       "properties": {
         "coordinator": {"$ref": "#/$defs/text"},
+        "module_owner": {"$ref": "#/$defs/text"},
         "writer": {"$ref": "#/$defs/text"},
         "resource_owner": {"$ref": "#/$defs/text"}
       }

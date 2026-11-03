@@ -19,6 +19,21 @@ class TaskContracts(unittest.TestCase):
     def test_example_has_a_valid_read_only_boundary(self):
         self.assertEqual(validation.validate_task(self.task()), [])
 
+    def test_role_assignment_does_not_replace_module_assignment(self):
+        task = self.task()
+        del task["module_id"]
+        self.assertTrue(validation.validate_task(task))
+
+    def test_module_has_an_owner_separate_from_file_writer(self):
+        task = self.task()
+        del task["owners"]["module_owner"]
+        self.assertTrue(validation.validate_task(task))
+
+    def test_module_assignment_does_not_replace_professional_role(self):
+        task = self.task()
+        del task["role_id"]
+        self.assertTrue(validation.validate_task(task))
+
     def test_read_only_task_cannot_claim_writable_files(self):
         task = self.task()
         task["scope"]["write_files"] = ["src/profile.ts"]
