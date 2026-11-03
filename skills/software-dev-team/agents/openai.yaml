@@ -1,4 +1,4 @@
 interface:
   display_name: "软件开发虚拟团队"
-  short_description: "按任务选择软件开发专业岗位，明确文件归属、协作边界与独立验收证据"
-  default_prompt: "请使用 $software-dev-team 处理当前软件开发目标，按需要选择岗位并完成验证。"
+  short_description: "先按功能模块拆分，再分配产品、前后端、测试与运维职责并验证交付"
+  default_prompt: "请使用 $software-dev-team 处理当前软件开发目标，先划分模块与职责，再按需要分工并完成验证。"

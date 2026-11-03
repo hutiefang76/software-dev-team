@@ -1,6 +1,6 @@
 ---
 name: software-dev-team
-description: 为软件开发任务选择专业岗位，组织有界分工、文件单写者和独立验收；需要时自动准备并更新官方 Maestro。用于开发协作与专业评审，简单问答不启动团队。
+description: 按功能模块分配产品、前端、后端、测试、运维职责，组织软件开发协作与独立验收；需要时自动准备并更新官方 Maestro。简单问答不启动团队。
 license: MIT
 metadata:
   short-description: 按需组织软件开发岗位与自动管理的 Maestro
@@ -27,7 +27,7 @@ metadata:
 本次任务需要编排，或用户明确要求准备 Maestro 时，先运行：
 
 ```text
-node <本技能绝对路径>/scripts/maestro-runtime.mjs ensure
+node "<本技能绝对路径>/scripts/maestro-runtime.mjs" ensure
 ```
 
 首次自动从官方 npm 安装；以后默认每 24 小时检查并自动更新。命令只下载官方软件，不向模型服务发送源码。运行前尊重宿主的网络、软件安装及目录写入限制；遇到拒绝不换目的地重试。
@@ -35,7 +35,7 @@ node <本技能绝对路径>/scripts/maestro-runtime.mjs ensure
 根据 JSON 回执读取实际版本、上游岗位入口与资源目录。将 `version` 固定为本任务使用的版本，之后所有 Maestro 命令经以下入口执行：
 
 ```text
-node <本技能绝对路径>/scripts/maestro-runtime.mjs run --version <回执版本> -- <官方子命令和参数>
+node "<本技能绝对路径>/scripts/maestro-runtime.mjs" run --version <回执版本> -- <官方子命令和参数>
 ```
 
 按需读 [Maestro 适配](references/maestro.md)。读取当前安装包自带的官方路由 Skill，不照抄历史命令。已有 Session/Run 继续消费原合同，不在任务中切换版本、不另开循环。运行时更新不自动迁移项目状态。
