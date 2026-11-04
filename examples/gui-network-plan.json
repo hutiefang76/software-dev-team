@@ -1,0 +1,577 @@
+{
+  "name": "示例：GUI 设备状态客户端（全部数值为虚构估算）",
+  "currency": "CNY",
+  "start_date": "2026-11-09",
+  "deadline": "2026-12-04",
+  "budget_limit": 50000,
+  "contingency_percent": 20,
+  "holidays": [],
+  "roles": [
+    "OWNER",
+    "PM",
+    "TL",
+    "DM",
+    "PROTO",
+    "BE",
+    "CLIENT",
+    "UI",
+    "OPS",
+    "QA"
+  ],
+  "resources": {
+    "manager": {
+      "roles": [
+        "PM",
+        "DM"
+      ],
+      "daily_capacity_hours": 4,
+      "hourly_rate": 180
+    },
+    "technical": {
+      "roles": [
+        "TL",
+        "PROTO",
+        "BE"
+      ],
+      "daily_capacity_hours": 6,
+      "hourly_rate": 260
+    },
+    "desktop": {
+      "roles": [
+        "CLIENT",
+        "UI"
+      ],
+      "daily_capacity_hours": 6,
+      "hourly_rate": 210
+    },
+    "operations": {
+      "roles": [
+        "OPS"
+      ],
+      "daily_capacity_hours": 4,
+      "hourly_rate": 200
+    },
+    "quality": {
+      "roles": [
+        "QA"
+      ],
+      "daily_capacity_hours": 5,
+      "hourly_rate": 180
+    }
+  },
+  "extra_costs": [
+    {
+      "name": "示例测试环境及模型费用（不是报价）",
+      "amount": 1500
+    }
+  ],
+  "tasks": [
+    {
+      "id": "P1",
+      "name": "目标 OS、连接行为和范围",
+      "role": "PM",
+      "resource": "manager",
+      "depends_on": [],
+      "estimate_hours": {
+        "optimistic": 4,
+        "likely": 6,
+        "pessimistic": 8
+      },
+      "acceptance": [
+        "GUI-01：Windows/macOS 查看状态；断线/取消/恢复行为明确"
+      ]
+    },
+    {
+      "id": "A1",
+      "name": "客户端框架与协议原型",
+      "role": "TL",
+      "resource": "technical",
+      "depends_on": [
+        "P1"
+      ],
+      "estimate_hours": {
+        "optimistic": 8,
+        "likely": 12,
+        "pessimistic": 18
+      },
+      "acceptance": [
+        "比较 Electron/Tauri/Qt；确认现有协议与未知硬件假设"
+      ]
+    },
+    {
+      "id": "M1",
+      "name": "预算/日期与角色映射",
+      "role": "DM",
+      "resource": "manager",
+      "depends_on": [
+        "A1"
+      ],
+      "estimate_hours": {
+        "optimistic": 2,
+        "likely": 4,
+        "pessimistic": 6
+      },
+      "acceptance": [
+        "兼任 PROTO/BE/TL 容量只计一次，冲突已展示"
+      ]
+    },
+    {
+      "id": "U1",
+      "name": "UI 状态和操作规范",
+      "role": "UI",
+      "resource": "desktop",
+      "depends_on": [
+        "P1"
+      ],
+      "estimate_hours": {
+        "optimistic": 6,
+        "likely": 8,
+        "pessimistic": 12
+      },
+      "acceptance": [
+        "GUI-02：连接/重连/取消/升级提示与键盘焦点"
+      ]
+    },
+    {
+      "id": "N1",
+      "name": "协议合同、编解码和兼容向量",
+      "role": "PROTO",
+      "resource": "technical",
+      "depends_on": [
+        "A1",
+        "M1"
+      ],
+      "estimate_hours": {
+        "optimistic": 10,
+        "likely": 16,
+        "pessimistic": 24
+      },
+      "acceptance": [
+        "GUI-03：截断/重复/超大消息和旧新版本测试向量"
+      ]
+    },
+    {
+      "id": "B1",
+      "name": "服务端会话与背压",
+      "role": "BE",
+      "resource": "technical",
+      "depends_on": [
+        "N1"
+      ],
+      "estimate_hours": {
+        "optimistic": 12,
+        "likely": 18,
+        "pessimistic": 28
+      },
+      "acceptance": [
+        "GUI-03/04：慢消费者和重连不会无界积压"
+      ]
+    },
+    {
+      "id": "C1",
+      "name": "GUI 客户端和网络生命周期",
+      "role": "CLIENT",
+      "resource": "desktop",
+      "depends_on": [
+        "N1",
+        "U1"
+      ],
+      "estimate_hours": {
+        "optimistic": 18,
+        "likely": 26,
+        "pessimistic": 40
+      },
+      "acceptance": [
+        "GUI-01/02：网络不阻塞 UI，断连释放资源，IPC 有边界"
+      ]
+    },
+    {
+      "id": "O1",
+      "name": "构建/签名流程草案与回滚",
+      "role": "OPS",
+      "resource": "operations",
+      "depends_on": [
+        "A1",
+        "M1"
+      ],
+      "estimate_hours": {
+        "optimistic": 6,
+        "likely": 10,
+        "pessimistic": 16
+      },
+      "acceptance": [
+        "OS 矩阵、可重复构建与更新回退；真实签名需已有授权"
+      ]
+    },
+    {
+      "id": "Q1",
+      "name": "跨端协议与故障验证",
+      "role": "QA",
+      "resource": "quality",
+      "depends_on": [
+        "B1",
+        "C1",
+        "O1"
+      ],
+      "estimate_hours": {
+        "optimistic": 12,
+        "likely": 18,
+        "pessimistic": 28
+      },
+      "acceptance": [
+        "GUI-01..04：实际 OS 结果、故障和资源证据；未测项明确"
+      ]
+    },
+    {
+      "id": "R1",
+      "name": "兼容与缺陷修复预留",
+      "role": "TL",
+      "resource": "technical",
+      "depends_on": [
+        "Q1"
+      ],
+      "estimate_hours": {
+        "optimistic": 6,
+        "likely": 10,
+        "pessimistic": 16
+      },
+      "acceptance": [
+        "阻断验收缺陷已复核，兼容例外有明确决定"
+      ]
+    },
+    {
+      "id": "D1",
+      "name": "业务验收",
+      "role": "PM",
+      "resource": "manager",
+      "depends_on": [
+        "R1"
+      ],
+      "estimate_hours": {
+        "optimistic": 2,
+        "likely": 4,
+        "pessimistic": 6
+      },
+      "acceptance": [
+        "核心用户路径通过或明确未通过"
+      ]
+    },
+    {
+      "id": "H1",
+      "name": "安装包与运维手册交接",
+      "role": "OPS",
+      "resource": "operations",
+      "depends_on": [
+        "D1"
+      ],
+      "estimate_hours": {
+        "optimistic": 3,
+        "likely": 5,
+        "pessimistic": 8
+      },
+      "acceptance": [
+        "制品可取得、环境与升级/回滚限制明确"
+      ]
+    }
+  ],
+  "raci": [
+    {
+      "deliverable": "范围与验收",
+      "a": "PM",
+      "r": [
+        "PM"
+      ],
+      "c": [
+        "OWNER",
+        "TL",
+        "QA",
+        "DM"
+      ],
+      "i": []
+    },
+    {
+      "deliverable": "架构与接口",
+      "a": "TL",
+      "r": [
+        "TL"
+      ],
+      "c": [
+        "PM",
+        "QA",
+        "OPS"
+      ],
+      "i": [
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "预算与日期批准",
+      "a": "OWNER",
+      "r": [
+        "DM"
+      ],
+      "c": [
+        "PM",
+        "TL"
+      ],
+      "i": [
+        "QA",
+        "OPS"
+      ]
+    },
+    {
+      "deliverable": "排期与预测",
+      "a": "DM",
+      "r": [
+        "DM"
+      ],
+      "c": [
+        "PM",
+        "TL"
+      ],
+      "i": [
+        "OWNER"
+      ]
+    },
+    {
+      "deliverable": "质量证据",
+      "a": "QA",
+      "r": [
+        "QA"
+      ],
+      "c": [
+        "PM",
+        "TL"
+      ],
+      "i": [
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "产品验收",
+      "a": "PM",
+      "r": [
+        "PM",
+        "QA"
+      ],
+      "c": [
+        "TL",
+        "OWNER"
+      ],
+      "i": [
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "发布决定",
+      "a": "OWNER",
+      "r": [
+        "DM",
+        "OPS"
+      ],
+      "c": [
+        "PM",
+        "TL",
+        "QA"
+      ],
+      "i": []
+    },
+    {
+      "deliverable": "协议合同",
+      "a": "TL",
+      "r": [
+        "PROTO"
+      ],
+      "c": [
+        "BE",
+        "CLIENT",
+        "QA"
+      ],
+      "i": [
+        "PM",
+        "DM",
+        "OPS"
+      ]
+    },
+    {
+      "deliverable": "服务端与客户端",
+      "a": "TL",
+      "r": [
+        "BE",
+        "CLIENT"
+      ],
+      "c": [
+        "PROTO",
+        "UI",
+        "QA",
+        "OPS"
+      ],
+      "i": [
+        "PM",
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "交互规范",
+      "a": "PM",
+      "r": [
+        "UI"
+      ],
+      "c": [
+        "CLIENT",
+        "QA",
+        "TL"
+      ],
+      "i": [
+        "DM"
+      ]
+    }
+  ],
+  "itto": [
+    {
+      "process": "需求",
+      "owner_role": "PM",
+      "inputs": [
+        "用户目标",
+        "约束"
+      ],
+      "tools_techniques": [
+        "用户旅程",
+        "验收分解"
+      ],
+      "outputs": [
+        "brief-v1",
+        "acceptance-v1"
+      ],
+      "gate": "核心路径有验收 ID，未知项明确"
+    },
+    {
+      "process": "设计",
+      "owner_role": "TL",
+      "inputs": [
+        "brief-v1",
+        "acceptance-v1",
+        "现有环境"
+      ],
+      "tools_techniques": [
+        "ADR",
+        "兼容表核验",
+        "有界原型"
+      ],
+      "outputs": [
+        "adr-v1",
+        "interface-v1",
+        "risk-v1"
+      ],
+      "gate": "接口可实施，风险有证据或负责人"
+    },
+    {
+      "process": "计划",
+      "owner_role": "DM",
+      "inputs": [
+        "brief-v1",
+        "interface-v1",
+        "risk-v1",
+        "资源日历与费率"
+      ],
+      "tools_techniques": [
+        "RACI",
+        "WBS",
+        "三点估算",
+        "容量排程"
+      ],
+      "outputs": [
+        "baseline-v1"
+      ],
+      "gate": "冲突已展示，用户批准前是估算"
+    },
+    {
+      "process": "实施",
+      "owner_role": "TL",
+      "inputs": [
+        "baseline-v1",
+        "interface-v1",
+        "acceptance-v1"
+      ],
+      "tools_techniques": [
+        "最小实现",
+        "契约/集成验证"
+      ],
+      "outputs": [
+        "build-v1",
+        "implementation-evidence-v1"
+      ],
+      "gate": "验收可追踪，接口变更已处理"
+    },
+    {
+      "process": "测试",
+      "owner_role": "QA",
+      "inputs": [
+        "acceptance-v1",
+        "build-v1",
+        "implementation-evidence-v1"
+      ],
+      "tools_techniques": [
+        "风险测试",
+        "缺陷复现"
+      ],
+      "outputs": [
+        "acceptance-report-v1",
+        "defects-v1"
+      ],
+      "gate": "每个必需项有实际状态"
+    },
+    {
+      "process": "交接",
+      "owner_role": "OPS",
+      "inputs": [
+        "build-v1",
+        "acceptance-report-v1",
+        "发布授权（如需）"
+      ],
+      "tools_techniques": [
+        "制品校验",
+        "回滚演练"
+      ],
+      "outputs": [
+        "handoff-v1"
+      ],
+      "gate": "用户能取得制品和已知限制"
+    },
+    {
+      "process": "变更",
+      "owner_role": "DM",
+      "inputs": [
+        "baseline-v1",
+        "实际消耗",
+        "剩余估算",
+        "新范围"
+      ],
+      "tools_techniques": [
+        "影响分析",
+        "预测重算"
+      ],
+      "outputs": [
+        "forecast-v2",
+        "change-decision"
+      ],
+      "gate": "授权后才修改承诺基线"
+    },
+    {
+      "process": "复盘",
+      "owner_role": "TL",
+      "inputs": [
+        "defects-v1",
+        "handoff-v1",
+        "实际消耗"
+      ],
+      "tools_techniques": [
+        "根因分析"
+      ],
+      "outputs": [
+        "improvement-record"
+      ],
+      "gate": "只固化有证据的改进"
+    }
+  ]
+}
