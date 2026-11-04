@@ -3,69 +3,469 @@
   "title": "软件开发团队任务卡",
   "type": "object",
   "additionalProperties": false,
-  "required": ["task_id", "goal", "module_id", "role_id", "repo", "inputs", "authority", "scope", "owners", "binding", "dependencies", "acceptance", "stop_conditions"],
+  "required": [
+    "task_id",
+    "goal",
+    "module_id",
+    "role_id",
+    "repo",
+    "inputs",
+    "authority",
+    "scope",
+    "owners",
+    "binding",
+    "dependencies",
+    "acceptance",
+    "stop_conditions"
+  ],
   "$defs": {
-    "text": {"type": "string", "minLength": 1, "pattern": "\\S"},
-    "text_list": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true}
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "text_list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      },
+      "uniqueItems": true
+    },
+    "nonnegative_or_unknown": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "nullable_text": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
   },
   "properties": {
-    "task_id": {"$ref": "#/$defs/text"},
-    "goal": {"$ref": "#/$defs/text"},
-    "module_id": {"$ref": "#/$defs/text", "description": "所属功能模块，引用当前唯一计划或 Run 合同的模块划分"},
-    "role_id": {"enum": ["planner", "product", "architect", "frontend", "backend", "desktop", "data", "automation", "devops", "qa", "security", "worker"]},
-    "repo": {"$ref": "#/$defs/text"},
-    "inputs": {"$ref": "#/$defs/text_list"},
-    "authority": {"allOf": [{"$ref": "#/$defs/text_list"}], "minItems": 1},
+    "task_id": {
+      "$ref": "#/$defs/text"
+    },
+    "goal": {
+      "$ref": "#/$defs/text"
+    },
+    "module_id": {
+      "$ref": "#/$defs/text",
+      "description": "所属功能模块，引用当前唯一计划或 Run 合同的模块划分"
+    },
+    "role_id": {
+      "enum": [
+        "planner",
+        "product",
+        "architect",
+        "frontend",
+        "backend",
+        "desktop",
+        "data",
+        "automation",
+        "devops",
+        "qa",
+        "security",
+        "worker"
+      ]
+    },
+    "repo": {
+      "$ref": "#/$defs/text"
+    },
+    "inputs": {
+      "$ref": "#/$defs/text_list"
+    },
+    "authority": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/text_list"
+        }
+      ],
+      "minItems": 1
+    },
     "scope": {
-      "type": "object", "additionalProperties": false,
-      "required": ["mode", "read_files", "write_files", "allowed_commands", "runtime_resources", "non_goals"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "read_files",
+        "write_files",
+        "allowed_commands",
+        "runtime_resources",
+        "non_goals"
+      ],
       "properties": {
-        "mode": {"enum": ["read-only", "write", "execute"]},
-        "read_files": {"$ref": "#/$defs/text_list"},
-        "write_files": {"$ref": "#/$defs/text_list"},
-        "allowed_commands": {"$ref": "#/$defs/text_list"},
-        "runtime_resources": {"$ref": "#/$defs/text_list"},
-        "non_goals": {"$ref": "#/$defs/text_list"}
+        "mode": {
+          "enum": [
+            "read-only",
+            "write",
+            "execute"
+          ]
+        },
+        "read_files": {
+          "$ref": "#/$defs/text_list"
+        },
+        "write_files": {
+          "$ref": "#/$defs/text_list"
+        },
+        "allowed_commands": {
+          "$ref": "#/$defs/text_list"
+        },
+        "runtime_resources": {
+          "$ref": "#/$defs/text_list"
+        },
+        "non_goals": {
+          "$ref": "#/$defs/text_list"
+        }
       },
       "allOf": [
-        {"if": {"properties": {"mode": {"const": "read-only"}}}, "then": {"properties": {"write_files": {"maxItems": 0}, "runtime_resources": {"maxItems": 0}}}},
-        {"if": {"properties": {"mode": {"const": "execute"}}}, "then": {"properties": {"allowed_commands": {"minItems": 1}}}}
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "read-only"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "write_files": {
+                "maxItems": 0
+              },
+              "runtime_resources": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "execute"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "allowed_commands": {
+                "minItems": 1
+              }
+            }
+          }
+        }
       ]
     },
     "owners": {
-      "type": "object", "additionalProperties": false,
-      "required": ["coordinator", "module_owner", "writer", "resource_owner"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coordinator",
+        "module_owner",
+        "writer",
+        "resource_owner"
+      ],
       "properties": {
-        "coordinator": {"$ref": "#/$defs/text"},
-        "module_owner": {"$ref": "#/$defs/text"},
-        "writer": {"$ref": "#/$defs/text"},
-        "resource_owner": {"$ref": "#/$defs/text"}
+        "coordinator": {
+          "$ref": "#/$defs/text"
+        },
+        "module_owner": {
+          "$ref": "#/$defs/text"
+        },
+        "writer": {
+          "$ref": "#/$defs/text"
+        },
+        "resource_owner": {
+          "$ref": "#/$defs/text"
+        }
       }
     },
     "binding": {
-      "type": "object", "additionalProperties": false,
-      "required": ["tool", "model", "effort", "disclosure"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "model",
+        "effort",
+        "disclosure"
+      ],
       "properties": {
-        "tool": {"$ref": "#/$defs/text"},
-        "model": {"$ref": "#/$defs/text"},
-        "effort": {"$ref": "#/$defs/text"},
+        "tool": {
+          "$ref": "#/$defs/text"
+        },
+        "model": {
+          "$ref": "#/$defs/text"
+        },
+        "effort": {
+          "$ref": "#/$defs/text"
+        },
         "disclosure": {
-          "type": "object", "additionalProperties": false,
-          "required": ["destination", "allowed_content"],
-          "properties": {"destination": {"$ref": "#/$defs/text"}, "allowed_content": {"$ref": "#/$defs/text_list"}},
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "destination",
+            "allowed_content"
+          ],
+          "properties": {
+            "destination": {
+              "$ref": "#/$defs/text"
+            },
+            "allowed_content": {
+              "$ref": "#/$defs/text_list"
+            }
+          },
           "allOf": [
-            {"if": {"properties": {"destination": {"const": "none"}}}, "then": {"properties": {"allowed_content": {"maxItems": 0}}}, "else": {"properties": {"allowed_content": {"minItems": 1}}}}
+            {
+              "if": {
+                "properties": {
+                  "destination": {
+                    "const": "none"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "allowed_content": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "allowed_content": {
+                    "minItems": 1
+                  }
+                }
+              }
+            }
           ]
         }
       }
     },
-    "dependencies": {"$ref": "#/$defs/text_list"},
-    "acceptance": {"allOf": [{"$ref": "#/$defs/text_list"}], "minItems": 1},
-    "stop_conditions": {"allOf": [{"$ref": "#/$defs/text_list"}], "minItems": 1},
-    "output_contract": {"$ref": "#/$defs/text"}
+    "dependencies": {
+      "$ref": "#/$defs/text_list"
+    },
+    "acceptance": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/text_list"
+        }
+      ],
+      "minItems": 1
+    },
+    "stop_conditions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/text_list"
+        }
+      ],
+      "minItems": 1
+    },
+    "output_contract": {
+      "$ref": "#/$defs/text"
+    },
+    "raci": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "a",
+        "r",
+        "c",
+        "i"
+      ],
+      "properties": {
+        "a": {
+          "$ref": "#/$defs/text"
+        },
+        "r": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text_list"
+            }
+          ],
+          "minItems": 1
+        },
+        "c": {
+          "$ref": "#/$defs/text_list"
+        },
+        "i": {
+          "$ref": "#/$defs/text_list"
+        }
+      }
+    },
+    "itto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputs",
+        "tools_techniques",
+        "outputs",
+        "gate"
+      ],
+      "properties": {
+        "inputs": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text_list"
+            }
+          ],
+          "minItems": 1
+        },
+        "tools_techniques": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text_list"
+            }
+          ],
+          "minItems": 1
+        },
+        "outputs": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/text_list"
+            }
+          ],
+          "minItems": 1
+        },
+        "gate": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executor",
+        "capacity_hours_per_day",
+        "estimate_hours",
+        "currency",
+        "cost_limit",
+        "actual_cost",
+        "remaining_cost",
+        "deadline",
+        "max_rework_rounds"
+      ],
+      "properties": {
+        "executor": {
+          "$ref": "#/$defs/text"
+        },
+        "capacity_hours_per_day": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 24
+        },
+        "estimate_hours": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "optimistic",
+            "likely",
+            "pessimistic"
+          ],
+          "properties": {
+            "optimistic": {
+              "$ref": "#/$defs/nonnegative_or_unknown"
+            },
+            "likely": {
+              "$ref": "#/$defs/nonnegative_or_unknown"
+            },
+            "pessimistic": {
+              "$ref": "#/$defs/nonnegative_or_unknown"
+            }
+          }
+        },
+        "currency": {
+          "$ref": "#/$defs/nullable_text"
+        },
+        "cost_limit": {
+          "$ref": "#/$defs/nonnegative_or_unknown"
+        },
+        "actual_cost": {
+          "$ref": "#/$defs/nonnegative_or_unknown"
+        },
+        "remaining_cost": {
+          "$ref": "#/$defs/nonnegative_or_unknown"
+        },
+        "deadline": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "max_rework_rounds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    }
   },
   "allOf": [
-    {"if": {"properties": {"scope": {"properties": {"write_files": {"minItems": 1}}}}}, "then": {"properties": {"owners": {"properties": {"writer": {"not": {"const": "none"}}}}}}},
-    {"if": {"properties": {"scope": {"properties": {"runtime_resources": {"minItems": 1}}}}}, "then": {"properties": {"owners": {"properties": {"resource_owner": {"not": {"const": "none"}}}}}}}
+    {
+      "if": {
+        "properties": {
+          "scope": {
+            "properties": {
+              "write_files": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "owners": {
+            "properties": {
+              "writer": {
+                "not": {
+                  "const": "none"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "scope": {
+            "properties": {
+              "runtime_resources": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "owners": {
+            "properties": {
+              "resource_owner": {
+                "not": {
+                  "const": "none"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   ]
 }

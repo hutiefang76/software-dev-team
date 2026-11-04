@@ -27,6 +27,14 @@ MyBatis 官方开发文档可能展示 SNAPSHOT 示例，不能直接用于生�
 
 ## 微服务与 AI 按需加入
 
+| Java 方案 | 性能/扩展性判断 | 学习与运行成本 |
+|---|---|---|
+| Spring Boot | 应用组织与配置基础；先测 SQL、连接池、锁、GC 与请求路径；可从模块化单体开始 | 仍需 Java/Spring/事务和诊断能力；比全套分布式系统少一层运维责任 |
+| Boot + Cloud | 解决发现、配置、路由和弹性等分布式模式，可分服务扩缩；也带来网络跳数和部分失败 | 需要分布式诊断、容错、观测和跨服务发布能力 |
+| Boot + Cloud + Alibaba | 适合已选择其相关中间件生态的集成，需要核对组件服务端与客户端 | 增加组件容量、高可用、版本配套和故障演练成本，按需引入 |
+
+这些是不同层次的组合，不是同类框架的速度排名。是否“强大、可扩展、容易学”由负载、状态/数据边界和团队已有能力决定。用同一业务切片比较实现、测试、诊断和交接耗时；无实测不宣称特定吞吐或倍数。[Boot](https://spring.io/projects/spring-boot/)、[Cloud 兼容表](https://spring.io/projects/spring-cloud/)、[Alibaba 兼容表](https://sca.aliyun.com/docs/2025.x/overview/version-explain/)。
+
 服务确需独立发布/扩缩/隔离后，再评估 Spring Cloud、Spring Cloud Alibaba 的注册配置、网关、限流熔断、消息等能力。严格核对 JDK、Boot、Cloud 发布列车与 Alibaba 配套矩阵，不凭主版本数字猜兼容。
 
 AI/RAG 任务可比较 Java 的 Spring AI 与已有 Python 能力，但先明确数据边界、模型/知识来源、质量评测、成本、超时与失败退路。普通业务执行不因使用 AI 开发而自动引入运行时模型调用。

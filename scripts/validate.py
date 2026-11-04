@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 import yaml
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "software-dev-team"
@@ -29,10 +30,34 @@ def resolve_inside(base: Path, relative: str, boundary: Path) -> Path:
     return target
 
 
-def validate_task(task: dict) -> list[str]:
-    schema = load_json(REFERENCES / "task-card.schema.json")
-    return [f"{'.'.join(map(str, error.absolute_path))}: {error.message}"
-            for error in Draft202012Validator(schema).iter_errors(task)]
+def validate_task(task: dict, references: Path = REFERENCES) -> list[str]:
+    schema = load_json(references / "task-card.schema.json")
+    errors = [f"{'.'.join(map(str, error.absolute_path))}: {error.message}"
+              for error in Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(task)]
+    if errors:
+        return errors
+    if "raci" in task:
+        row = task["raci"]
+        a, r, c, i = {row["a"]}, set(row["r"]), set(row["c"]), set(row["i"])
+        if c & (a | r | i) or i & (a | r):
+            errors.append("raci: C/I must not overlap other responsibilities")
+    if "delivery" in task:
+        delivery = task["delivery"]
+        estimates = list(delivery["estimate_hours"].values())
+        numbers = estimates + [delivery[key] for key in
+                              ("capacity_hours_per_day", "cost_limit", "actual_cost", "remaining_cost")]
+        if any(value is not None and not math.isfinite(value) for value in numbers):
+            errors.append("delivery: values must be finite or null")
+        if any(value is None for value in estimates) and not all(value is None for value in estimates):
+            errors.append("delivery: estimate bounds must be all known or all null")
+        elif all(value is not None for value in estimates):
+            e = delivery["estimate_hours"]
+            if not e["optimistic"] <= e["likely"] <= e["pessimistic"]:
+                errors.append("delivery: require optimistic <= likely <= pessimistic")
+        if delivery["currency"] is None and any(delivery[key] is not None for key in
+                                               ("cost_limit", "actual_cost", "remaining_cost")):
+            errors.append("delivery: monetary values require an explicit currency")
+    return errors
 
 
 def validate_package(skill: Path = SKILL) -> list[str]:
@@ -79,8 +104,8 @@ def validate_package(skill: Path = SKILL) -> list[str]:
     Draft202012Validator.check_schema(schema)
     if set(schema["properties"]["role_id"]["enum"]) != set(ids):
         errors.append("Task role enum must match the role catalog")
-    errors.extend(error.message for error in Draft202012Validator(schema).iter_errors(
-        load_json(references / "dispatch-example.json")))
+    for example in ("dispatch-example.json", "delivery-task-example.json"):
+        errors.extend(validate_task(load_json(references / example), references))
 
     for file in skill.rglob("*"):
         if not file.is_file():

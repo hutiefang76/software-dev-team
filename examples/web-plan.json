@@ -1,0 +1,545 @@
+{
+  "name": "示例：内部工单 Web MVP（全部数值为虚构估算）",
+  "currency": "CNY",
+  "start_date": "2026-11-09",
+  "deadline": "2026-11-27",
+  "budget_limit": 30000,
+  "contingency_percent": 15,
+  "holidays": [],
+  "roles": [
+    "OWNER",
+    "PM",
+    "TL",
+    "DM",
+    "FE",
+    "BE",
+    "UI",
+    "OPS",
+    "QA"
+  ],
+  "resources": {
+    "manager": {
+      "roles": [
+        "PM",
+        "DM"
+      ],
+      "daily_capacity_hours": 4,
+      "hourly_rate": 180
+    },
+    "technical": {
+      "roles": [
+        "TL",
+        "BE"
+      ],
+      "daily_capacity_hours": 6,
+      "hourly_rate": 220
+    },
+    "frontend": {
+      "roles": [
+        "FE",
+        "UI"
+      ],
+      "daily_capacity_hours": 6,
+      "hourly_rate": 160
+    },
+    "operations": {
+      "roles": [
+        "OPS"
+      ],
+      "daily_capacity_hours": 4,
+      "hourly_rate": 180
+    },
+    "quality": {
+      "roles": [
+        "QA"
+      ],
+      "daily_capacity_hours": 6,
+      "hourly_rate": 160
+    }
+  },
+  "extra_costs": [
+    {
+      "name": "示例 CI/云费用（不是市场报价）",
+      "amount": 600
+    },
+    {
+      "name": "示例模型/工具费用（不含于工时费率）",
+      "amount": 200
+    }
+  ],
+  "tasks": [
+    {
+      "id": "P1",
+      "name": "范围与权限验收",
+      "role": "PM",
+      "resource": "manager",
+      "depends_on": [],
+      "estimate_hours": {
+        "optimistic": 4,
+        "likely": 6,
+        "pessimistic": 8
+      },
+      "acceptance": [
+        "WEB-01：提交工单并查看本人列表；越权读取被拒"
+      ]
+    },
+    {
+      "id": "A1",
+      "name": "架构、API 与 Java 版本 ADR",
+      "role": "TL",
+      "resource": "technical",
+      "depends_on": [
+        "P1"
+      ],
+      "estimate_hours": {
+        "optimistic": 6,
+        "likely": 8,
+        "pessimistic": 12
+      },
+      "acceptance": [
+        "ADR 比较 Boot 与微服务，API 错误/权限/幂等可验证"
+      ]
+    },
+    {
+      "id": "M1",
+      "name": "确认容量和预算基线",
+      "role": "DM",
+      "resource": "manager",
+      "depends_on": [
+        "A1"
+      ],
+      "estimate_hours": {
+        "optimistic": 2,
+        "likely": 3,
+        "pessimistic": 4
+      },
+      "acceptance": [
+        "角色映射、RACI/ITTO、日期和预算冲突有结论"
+      ]
+    },
+    {
+      "id": "U1",
+      "name": "交互与异常状态",
+      "role": "UI",
+      "resource": "frontend",
+      "depends_on": [
+        "P1"
+      ],
+      "estimate_hours": {
+        "optimistic": 4,
+        "likely": 6,
+        "pessimistic": 8
+      },
+      "acceptance": [
+        "WEB-02：键盘提交、加载/空/失败/恢复状态明确"
+      ]
+    },
+    {
+      "id": "B1",
+      "name": "后端与权限集成",
+      "role": "BE",
+      "resource": "technical",
+      "depends_on": [
+        "A1",
+        "M1"
+      ],
+      "estimate_hours": {
+        "optimistic": 12,
+        "likely": 18,
+        "pessimistic": 28
+      },
+      "acceptance": [
+        "WEB-01/03：权限隔离、事务、重试不重复创建"
+      ]
+    },
+    {
+      "id": "F1",
+      "name": "前端纵向路径",
+      "role": "FE",
+      "resource": "frontend",
+      "depends_on": [
+        "A1",
+        "M1",
+        "U1"
+      ],
+      "estimate_hours": {
+        "optimistic": 12,
+        "likely": 16,
+        "pessimistic": 24
+      },
+      "acceptance": [
+        "WEB-01/02：真实 API 路径和异常恢复通过"
+      ]
+    },
+    {
+      "id": "O1",
+      "name": "构建与本地恢复配置",
+      "role": "OPS",
+      "resource": "operations",
+      "depends_on": [
+        "A1",
+        "M1"
+      ],
+      "estimate_hours": {
+        "optimistic": 6,
+        "likely": 8,
+        "pessimistic": 12
+      },
+      "acceptance": [
+        "可重复构建、配置隔离、健康检查与回滚步骤"
+      ]
+    },
+    {
+      "id": "Q1",
+      "name": "集成与关键路径验收",
+      "role": "QA",
+      "resource": "quality",
+      "depends_on": [
+        "B1",
+        "F1",
+        "O1"
+      ],
+      "estimate_hours": {
+        "optimistic": 8,
+        "likely": 12,
+        "pessimistic": 18
+      },
+      "acceptance": [
+        "验收 ID 逐项附测试环境、结果与证据"
+      ]
+    },
+    {
+      "id": "R1",
+      "name": "技术复核与缺陷修复预留",
+      "role": "TL",
+      "resource": "technical",
+      "depends_on": [
+        "Q1"
+      ],
+      "estimate_hours": {
+        "optimistic": 4,
+        "likely": 6,
+        "pessimistic": 8
+      },
+      "acceptance": [
+        "必需技术验收无阻断缺口，其他风险有负责人"
+      ]
+    },
+    {
+      "id": "D1",
+      "name": "业务验收演示",
+      "role": "PM",
+      "resource": "manager",
+      "depends_on": [
+        "R1"
+      ],
+      "estimate_hours": {
+        "optimistic": 2,
+        "likely": 3,
+        "pessimistic": 4
+      },
+      "acceptance": [
+        "产品验收状态真实，未批准项明确"
+      ]
+    },
+    {
+      "id": "H1",
+      "name": "制品和手册交接",
+      "role": "OPS",
+      "resource": "operations",
+      "depends_on": [
+        "D1"
+      ],
+      "estimate_hours": {
+        "optimistic": 2,
+        "likely": 4,
+        "pessimistic": 6
+      },
+      "acceptance": [
+        "可取得制品、版本与恢复说明；不假定生产上线"
+      ]
+    }
+  ],
+  "raci": [
+    {
+      "deliverable": "范围与验收",
+      "a": "PM",
+      "r": [
+        "PM"
+      ],
+      "c": [
+        "OWNER",
+        "TL",
+        "QA",
+        "DM"
+      ],
+      "i": []
+    },
+    {
+      "deliverable": "架构与接口",
+      "a": "TL",
+      "r": [
+        "TL"
+      ],
+      "c": [
+        "PM",
+        "QA",
+        "OPS"
+      ],
+      "i": [
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "预算与日期批准",
+      "a": "OWNER",
+      "r": [
+        "DM"
+      ],
+      "c": [
+        "PM",
+        "TL"
+      ],
+      "i": [
+        "QA",
+        "OPS"
+      ]
+    },
+    {
+      "deliverable": "排期与预测",
+      "a": "DM",
+      "r": [
+        "DM"
+      ],
+      "c": [
+        "PM",
+        "TL"
+      ],
+      "i": [
+        "OWNER"
+      ]
+    },
+    {
+      "deliverable": "质量证据",
+      "a": "QA",
+      "r": [
+        "QA"
+      ],
+      "c": [
+        "PM",
+        "TL"
+      ],
+      "i": [
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "产品验收",
+      "a": "PM",
+      "r": [
+        "PM",
+        "QA"
+      ],
+      "c": [
+        "TL",
+        "OWNER"
+      ],
+      "i": [
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "发布决定",
+      "a": "OWNER",
+      "r": [
+        "DM",
+        "OPS"
+      ],
+      "c": [
+        "PM",
+        "TL",
+        "QA"
+      ],
+      "i": []
+    },
+    {
+      "deliverable": "Web 实现",
+      "a": "TL",
+      "r": [
+        "FE",
+        "BE"
+      ],
+      "c": [
+        "UI",
+        "QA",
+        "OPS"
+      ],
+      "i": [
+        "PM",
+        "DM"
+      ]
+    },
+    {
+      "deliverable": "交互规范",
+      "a": "PM",
+      "r": [
+        "UI"
+      ],
+      "c": [
+        "FE",
+        "QA",
+        "TL"
+      ],
+      "i": [
+        "DM"
+      ]
+    }
+  ],
+  "itto": [
+    {
+      "process": "需求",
+      "owner_role": "PM",
+      "inputs": [
+        "用户目标",
+        "约束"
+      ],
+      "tools_techniques": [
+        "用户旅程",
+        "验收分解"
+      ],
+      "outputs": [
+        "brief-v1",
+        "acceptance-v1"
+      ],
+      "gate": "核心路径有验收 ID，未知项明确"
+    },
+    {
+      "process": "设计",
+      "owner_role": "TL",
+      "inputs": [
+        "brief-v1",
+        "acceptance-v1",
+        "现有环境"
+      ],
+      "tools_techniques": [
+        "ADR",
+        "兼容表核验",
+        "有界原型"
+      ],
+      "outputs": [
+        "adr-v1",
+        "interface-v1",
+        "risk-v1"
+      ],
+      "gate": "接口可实施，风险有证据或负责人"
+    },
+    {
+      "process": "计划",
+      "owner_role": "DM",
+      "inputs": [
+        "brief-v1",
+        "interface-v1",
+        "risk-v1",
+        "资源日历与费率"
+      ],
+      "tools_techniques": [
+        "RACI",
+        "WBS",
+        "三点估算",
+        "容量排程"
+      ],
+      "outputs": [
+        "baseline-v1"
+      ],
+      "gate": "冲突已展示，用户批准前是估算"
+    },
+    {
+      "process": "实施",
+      "owner_role": "TL",
+      "inputs": [
+        "baseline-v1",
+        "interface-v1",
+        "acceptance-v1"
+      ],
+      "tools_techniques": [
+        "最小实现",
+        "契约/集成验证"
+      ],
+      "outputs": [
+        "build-v1",
+        "implementation-evidence-v1"
+      ],
+      "gate": "验收可追踪，接口变更已处理"
+    },
+    {
+      "process": "测试",
+      "owner_role": "QA",
+      "inputs": [
+        "acceptance-v1",
+        "build-v1",
+        "implementation-evidence-v1"
+      ],
+      "tools_techniques": [
+        "风险测试",
+        "缺陷复现"
+      ],
+      "outputs": [
+        "acceptance-report-v1",
+        "defects-v1"
+      ],
+      "gate": "每个必需项有实际状态"
+    },
+    {
+      "process": "交接",
+      "owner_role": "OPS",
+      "inputs": [
+        "build-v1",
+        "acceptance-report-v1",
+        "发布授权（如需）"
+      ],
+      "tools_techniques": [
+        "制品校验",
+        "回滚演练"
+      ],
+      "outputs": [
+        "handoff-v1"
+      ],
+      "gate": "用户能取得制品和已知限制"
+    },
+    {
+      "process": "变更",
+      "owner_role": "DM",
+      "inputs": [
+        "baseline-v1",
+        "实际消耗",
+        "剩余估算",
+        "新范围"
+      ],
+      "tools_techniques": [
+        "影响分析",
+        "预测重算"
+      ],
+      "outputs": [
+        "forecast-v2",
+        "change-decision"
+      ],
+      "gate": "授权后才修改承诺基线"
+    },
+    {
+      "process": "复盘",
+      "owner_role": "TL",
+      "inputs": [
+        "defects-v1",
+        "handoff-v1",
+        "实际消耗"
+      ],
+      "tools_techniques": [
+        "根因分析"
+      ],
+      "outputs": [
+        "improvement-record"
+      ],
+      "gate": "只固化有证据的改进"
+    }
+  ]
+}

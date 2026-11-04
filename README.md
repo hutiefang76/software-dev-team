@@ -50,17 +50,37 @@ $software-dev-team 帮我分析现有软件的问题，本轮只给方案，不�
 
 ## 安装
 
-使用下面的安装工具需要 Node.js 22.20 或更高版本。安装时选择你使用的 AI 编程客户端：
+**可以让 AI 帮你安装。** 在有文件与终端权限的 Codex 中，直接发送：
 
 ```text
-npx skills add hutiefang76/software-dev-team --skill software-dev-team
+$skill-installer 请安装 https://github.com/hutiefang76/software-dev-team/tree/main/skills/software-dev-team
 ```
 
-在 Codex 中也可以让 `$skill-installer` 安装 [software-dev-team](https://github.com/hutiefang76/software-dev-team/tree/main/skills/software-dev-team)。
+这是持续更新的安装地址。安装后下一轮可用；若未显示，重开会话或重启客户端，再用 `$software-dev-team` 调用。安装到某一客户端不会自动安装到其他客户端。
 
-也可从 [Release](https://github.com/hutiefang76/software-dev-team/releases) 下载技能文件夹，安装到客户端的技能目录。
+使用通用 Skills CLI 时，需要 Node.js 22.20 或更高版本。以下命令在当前项目安装一个技能到 Codex；加 `-g` 则为用户级安装：
+
+```text
+npx skills add hutiefang76/software-dev-team --skill software-dev-team -a codex -y
+```
+
+Claude Code 或 Cursor 将 `-a codex` 分别改成 `-a claude-code` 或 `-a cursor`。不指定 `-a` 可交互选择客户端。客户端安装目录由安装器处理，完整说明见 [安装与首次使用](docs/install.md)。
+
+没有终端权限的普通聊天会话只能给出安装步骤；安装需要在实际使用的客户端/机器上执行。已有同名技能先检查来源和差异，不重复安装多个同名版本。
 
 技能本身没有程序运行时依赖，不需要安装 Maestro，也不会自动下载或更新它。已有 Maestro 或其他编排工具可以继续独立使用。
+
+## 管理范围、预算与时间
+
+产品经理负责范围和业务验收，技术经理负责方案和接口，协调者负责计划、资源和交接。需要协作时使用 RACI 明确执行与决定责任，用 ITTO 串联每阶段的输入、方法和输出；兼任多个岗位的执行者只计算一份容量。
+
+```text
+$software-dev-team 做一个带 GUI 的设备工具，需要协议、客户端、UI 和测试职责。
+请确认是否已有设备服务端，并给出 RACI、ITTO、预算与依赖排期。
+预算和硬件未知的部分明确列出，不虚构价格或性能。
+```
+
+工时、真实执行时间、模型费用分别记录；超预算或延期时给出缩减范围、调整日期和资源的具体选择。技能可直接使用现有工具做估算；仓库还提供可选的 Python [离线计划计算器](docs/maintaining.md)，它不属于安装依赖。
 
 ## 进一步了解
 

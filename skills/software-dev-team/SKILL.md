@@ -1,6 +1,6 @@
 ---
 name: software-dev-team
-description: 帮助用户将软件需求转成技术方案、功能模块和专业分工，覆盖 Web、桌面 GUI、手机 App、脚本、测试与运维。按交付速度、性能和维护要求选择工具，联网查证不确定技术并推进交付。
+description: 将软件需求转成技术方案、模块分工与可验收交付，覆盖 Web、GUI、移动和脚本。需要团队管理时明确产品/技术职责、RACI/ITTO、预算与资源排期；简单修改直接处理。
 license: MIT
 metadata:
   short-description: 软件方案选择、模块分工与专业开发交付
@@ -27,6 +27,10 @@ metadata:
 从 [岗位索引](references/roles.json) 选必要岗位，只读取其工作对应的 [技术章节](references/stacks.md)。保留岗位的专业决策、交付物和验收标准，不把所有成员变成相同的通用执行者。GUI、Web、移动端与脚本使用各自的工具和验证方式。
 
 指定模块负责人、文件单写者和共享资源负责人，明确依赖与接口后才并行。同一成员可以承担多个职责，不按矩阵格子凑人数。沿用现有唯一计划及 Maestro 合同。
+
+始终覆盖产品与技术决策责任；`product` 承担产品经理，`architect` 承担技术经理，`planner` 承担交付管理，可兼任但不重复计算执行者容量。涉及跨模块责任、预算、日期或变更时按需读取 [治理与 RACI/ITTO](references/governance.md) 和 [预算与时间](references/delivery-planning.md)，写入已有计划，不强制另建文件或注册原生 Agent。
+
+GUI 网络项目按 [协议与两端合同](references/technology/network-gui.md) 覆盖协议、客户端、UI、测试和运维；远端可由设备既有服务承担，先确认是否需要自建服务端。
 
 ## 执行与验证
 
